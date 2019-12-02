@@ -20,7 +20,7 @@ def process_list(opcodes, pointer=0):
     elif opcodes[pointer] == 2:
         return opcode_2(opcodes, pointer)
     else:
-        print("Encountered unknown opcode: %s", opcodes[pointer])
+        print("Encountered unknown opcode: %s" % opcodes[pointer])
 
 assert process_list([1,0,0,0,99]) == [2,0,0,0,99]
 assert process_list([2,3,0,3,99]) == [2,3,0,6,99]
