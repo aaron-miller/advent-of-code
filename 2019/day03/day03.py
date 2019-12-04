@@ -6,8 +6,9 @@ class Wire():
         self.coords = []
         x = 0
         y = 0
+        total_steps = 1
         for wire_segment in self.wire_segments:
-            for i in range(0,wire_segment.length):
+            for wire_step in range(0,wire_segment.length):
                 if wire_segment.direction == 'U':
                     y = y + 1
                 elif wire_segment.direction == 'R':
@@ -16,7 +17,8 @@ class Wire():
                     y = y - 1
                 elif wire_segment.direction == 'L':
                     x = x - 1
-                self.coords.append(WireCoordinate(x, y))
+                self.coords.append(WireCoordinate(x, y, wire_step + total_steps))
+            total_steps = total_steps + wire_segment.length
 
 class WireSegment():
     def __init__(self, segment_string):
@@ -24,9 +26,10 @@ class WireSegment():
         self.length = int(segment_string[1:])
 
 class WireCoordinate():
-    def __init__(self, x, y):
+    def __init__(self, x, y, step):
         self.x = x
         self.y = y
+        self.step = step
 
     def distance_from_origin(self):
         return abs(self.x) + abs(self.y)
@@ -68,3 +71,29 @@ wire2 = [
 ]
 
 print(get_closest_intersection(wire1, wire2))
+
+def get_best_step(wire1_coords, wire2_coords):
+    wire1 = Wire(wire1_coords)
+    wire2 = Wire(wire2_coords)
+
+    intersections = list(set(wire1.coords).intersection(set(wire2.coords)))
+
+    step_values = []
+    for intersection in intersections:
+        wire1_step_index = wire1.coords.index(intersection)
+        wire2_step_index = wire2.coords.index(intersection)
+        step_values.append(wire1.coords[wire1_step_index].step + wire2.coords[wire2_step_index].step)
+    step_values.sort()
+    return step_values[0]
+
+assert get_best_step(
+    ['R75','D30','R83','U83','L12','D49','R71','U7','L72'],
+    ['U62','R66','U55','R34','D71','R55','D58','R83']
+) == 610
+
+assert get_best_step(
+    ['R98','U47','R26','D63','R33','U87','L62','D20','R33','U53','R51'],
+    ['U98','R91','D20','R16','D67','R40','U7','R15','U6','R7']
+) == 410
+
+print(get_best_step(wire1, wire2))
