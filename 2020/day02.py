@@ -1,5 +1,3 @@
-import re
-
 class Password():
     def __init__(self, password_str):
         req_str, char_str, password_str = password_str.split(' ')
