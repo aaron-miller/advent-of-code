@@ -23,4 +23,4 @@ if __name__ == "__main__":
         for line in f.readlines():
             if MinMaxPasswordValidator(line).is_valid():
                 total_count += 1
-    print(total_count)
+    print(f"part one: {total_count}")
